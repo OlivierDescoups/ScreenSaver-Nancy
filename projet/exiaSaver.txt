@@ -1,0 +1,155 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include <unistd.h>
+#include <string.h>
+
+
+int exiasaver_arg_stats(const char* arg){
+	int i=0;
+	const char* stat="-stats";
+    if( strlen(arg) != strlen(stat) ){  //on verifie la taille
+        return 0;
+    }
+    for(i=0;i<strlen(arg);i++){			//on verifie caractère par caractère
+        if( arg[i] != stat[i]){
+            return 0;
+        }
+    }
+    return 1;
+
+
+}
+
+
+
+int main(int argc, char const *argv[]){
+
+	
+	if (argc==2){  //si il y a un seul argument, verifier s'il s'agit de -stats
+		char exiasaver_arg[6];
+		printf("%s\n",argv[1]);
+		strcpy(exiasaver_arg, argv[1]);
+		printf("%s\n", exiasaver_arg);
+		if (exiasaver_arg_stats(exiasaver_arg)==1){
+ 		printf("exec statistique\n\n"); //lancer les stats
+ 			return 1;
+		}
+		else{
+			return 2;
+		}
+	}
+
+	if (argc>2){
+		return 3;
+	}
+
+	int exiasaver_rand_prgm;
+	int exiasaver_rand_prgm_adr;
+
+	srand(time(NULL));                         															   //initialise rand()
+	exiasaver_rand_prgm=rand()%3;             						    //Permet d'avoir un nombre aléatoire entre 0 et 3(exclu)
+
+	printf("DEBUG / Quel écran a été determiné ? %d\n DEBUG / 0=Statique; 1=Dynamique; 2=Interactif",exiasaver_rand_prgm );//DEBUG
+	exiasaver_rand_prgm_adr=scanf("%d",&exiasaver_rand_prgm); 													//DEBUG
+
+
+
+
+
+
+	struct exiasaver_historique{                                        //defini le struct qui deviendra les string à entrer dans l'historique
+		int type_ecran;
+		char info_complement[6];
+	};
+
+
+
+	switch (exiasaver_rand_prgm){                                     // Dois réaliser les lectures du .profile necessaire, 
+
+		case 0:
+		printf("DEBUG / Statique\n"); 
+		// exiasaver_statique_()
+		break;
+
+		case 1:
+		printf("DEBUG / Dynamique\n");
+		// exiasaver_dynamique_lecture_envir()
+		break;
+
+		case 2:
+		printf("DEBUG / Interactif\n");
+		// exiasaver_interactif_()
+		break;
+
+		default :
+		printf("DEBUG / ERREUR\n");
+		return 1;
+	}
+
+
+
+
+
+
+
+	time_t secondes;							//creer variable
+	struct tm instant;
+	time(&secondes);
+	instant=*localtime(&secondes);
+
+	printf("%d/%d ; %d:%d:%d\n",instant.tm_mday+1, instant.tm_mon+1, instant.tm_hour, instant.tm_min, instant.tm_sec); //afficher printf de l'heure
+
+	FILE* exiasaver_fichier_historique = NULL;																		   // creer le poiteur du fichier
+
+
+		while(exiasaver_fichier_historique==NULL){
+	    exiasaver_fichier_historique= fopen("historique.txt", "a");													// recuperer le fichier
+		}
+
+	    if ( exiasaver_fichier_historique != NULL )
+
+	    {
+	    	printf("ecriture dans l'historique\n\n");
+	         fprintf(exiasaver_fichier_historique,"%d/%d ; %d:%d:%d\n",instant.tm_mday+1, instant.tm_mon+1, instant.tm_hour, instant.tm_min, instant.tm_sec); //ecrire
+	     }
+
+	     
+
+
+// ------------------------------------------AJOUTER LES AUTRES VARIABLES À ENRIGSTRER-----------------------------------------------
+
+
+
+	fclose(exiasaver_fichier_historique);
+
+
+
+
+
+
+	switch (exiasaver_rand_prgm){  //lance les term_saver
+
+		case 0:
+		//
+		break;
+
+		case 1:
+
+		break;
+
+		case 2:
+
+		break;
+
+		default :
+		printf("DEBUG / ERREUR\n");
+		return 2;
+
+
+
+
+	}
+
+	return 0;
+}
